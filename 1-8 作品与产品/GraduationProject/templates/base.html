@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'md_css/monokai.css' %}">
+    <script src="{% static 'ckeditor/ckeditor/plugins/prism/lib/prism/prism_patched.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'prism/prism.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+</head>
+<body>
+{% block style %}{% endblock style %}
+{% include 'header.html' %}
+<div id="wrapper">
+    {% block content %}{% endblock content %}
+    <div id="push"></div>
+</div>
+{% include 'footer.html' %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/echarts/3.0.0/echarts.min.js"></script>
+<script src="{% static 'layer/src/layer.js' %}"></script>
+<script src="{% static 'layui/layui.js' %}"></script>
+{% block script %}{% endblock script %}
+{% include 'back_to_top_func.html' %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    #wrapper {
+        min-height: 100%;
+        margin-bottom: -60px;
+        background-color: #faf9f9;
+    }
+
+    #push {
+        height: 60px;
+    }
+</style>
+</body>
+</html>

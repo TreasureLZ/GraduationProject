@@ -1,0 +1,298 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}首页{% endblock title %}
+{% block style %}
+    <style>
+        .job-card-pc-container .job-card-left-box {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        *, :after, :before {
+            box-sizing: border-box;
+        }
+
+        .job-detail-box a, .job-detail-box a:focus, .job-detail-box a:hover {
+            text-decoration: none;
+        }
+
+        a {
+            color: #5897ff;
+            text-decoration: none;
+            background-color: transparent;
+            outline: none;
+            cursor: pointer;
+            transition: color .3s;
+            -webkit-text-decoration-skip: objects;
+        }
+
+        .job-card-pc-container {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 16px;
+            padding: 16px 23px 16px 16px;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+
+        .job-card-pc-container .job-card-left-box {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .job-detail-box .job-detail-header-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .job-detail-box .job-detail-header-box .job-title-box {
+            overflow: hidden;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 25px;
+            color: #000;
+            display: flex;
+            align-items: center;
+        }
+
+        .ellipsis-1 {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .job-detail-box .job-detail-header-box .job-salary {
+            flex-shrink: 0;
+            margin-left: 12px;
+            font-size: 18px;
+            line-height: 25px;
+            font-weight: 700;
+            color: #ff6400;
+        }
+
+        .job-detail-box .job-labels-box {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            height: 22px;
+            overflow: hidden;
+        }
+
+        .job-detail-box .job-labels-box .labels-tag {
+            margin-right: 8px;
+            font-size: 12px;
+            line-height: 22px;
+            border-radius: 6px;
+            padding: 0 8px;
+            color: #666;
+            background-color: #f8f9fb;
+        }
+
+        .job-detail-box .job-detail-company-box .job-company-info-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .job-detail-box .job-detail-company-box .job-company-info-box .company-name {
+            flex-shrink: 0;
+            max-width: 290px;
+            padding-left: 8px;
+            line-height: 17px;
+            font-weight: 700;
+            font-size: 12px;
+            color: #07132b;
+        }
+
+        .job-detail-box .job-detail-company-box .job-company-info-box .company-tags-box {
+            margin-left: 8px;
+            padding-left: 8px;
+            border-left: 1px solid rgba(230, 234, 241, .5);
+            line-height: 17px;
+            color: #666;
+        }
+
+        .options-row {
+            display: flex;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            line-height: 20px;
+            border-bottom: 1px solid #f0f3f7;
+        }
+
+        .options-row .row-title {
+            flex-shrink: 0;
+            width: 84px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .options-row .row-options-detail-box .options-item {
+            padding-right: 20px;
+            line-height: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .filter-options-container .options-row .row-options-detail-box {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+{% endblock style %}
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'system:index' %}?search={{ search }}&order=new_views">
+                        最新
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    {% if order == 'total_views' %}
+                        <span style="color: gray">最热</span>
+                    {% else %}
+                        <a href="{% url 'system:index' %}?search={{ search }}">
+                            最热
+                        </a>
+                    {% endif %}
+                </li>
+            </ol>
+        </nav>
+        <div class="options-row">
+            <div class="row-title">城市</div>
+            <ul class="row-options-detail-box">
+                <a href="{% url 'system:index' %}?order={{ order }}&search={{ search }}" style="text-decoration: none">
+                    <span>全国</span>&nbsp&nbsp
+                </a>
+                {% for city in city_cnt %}
+                    <a href="{% url 'system:index' %}?order={{ order }}&search={{ search }}&city={{ city }}" style="text-decoration: none">
+                        <span>{{ city }}</span>&nbsp&nbsp
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-auto mr-auto">
+                <form class="form-inline" action="{% url 'system:index' %}">
+                    <label class="sr-only">content</label>
+                    {% if search %}
+                        <input type="text"
+                               class="form-control mb-2 mr-sm-2"
+                               name="search"
+                               placeholder={{ search }}
+                        >
+                    {% else %}
+                        <input type="text"
+                               class="form-control mb-2 mr-sm-2"
+                               name="search"
+                               placeholder="按岗位名称搜索"
+                        >
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary mb-2 mr-sm-2">搜索</button>
+                    <a type="button" href="{% url 'system:index' %}" class="btn btn-primary mb-2 mr-sm-2">清空</a>
+                </form>
+            </div>
+        </div>
+        {% if search %}
+            {% if articles %}
+                <h4><span style="color: red">"{{ search }}"</span>的搜索结果如下：</h4>
+                <hr>
+            {% else %}
+                <h4>暂无<span style="color: red">"{{ search }}"</span>有关的岗位数据。</h4>
+                <hr>
+            {% endif %}
+        {% endif %}
+        <div>
+            <ul>
+                {% for job in jobs %}
+                    <li>
+                        <div class="job-list-item">
+                            <div class="job-card-pc-container">
+                                <div class="job-card-left-box">
+                                    <div class="job-detail-box">
+                                        <a data-nick="job-detail-job-info" target="_blank" href="{{ job.job_url }}">
+                                            <div class="job-detail-header-box">
+                                                <div class="job-title-box">
+                                                    <div title="{{ job.job_name }}"
+                                                         class="ellipsis-1">{{ job.job_name }}</div>
+                                                    <div class="job-dq-box">
+                                                        <span class="dq-bracket">【</span>
+                                                        {% if job.area %}
+                                                            <span class="ellipsis-1">{{ job.city }}-{{ job.area }}</span>
+                                                        {% else %}
+                                                            <span class="ellipsis-1">{{ job.city }}</span>
+                                                        {% endif %}
+                                                        <span class="dq-bracket">】</span>
+                                                    </div>
+                                                </div>
+                                                <span class="job-salary">{{ job.salary }}</span>
+                                            </div>
+                                            <div class="job-labels-box">
+                                                <span class="labels-tag">{{ job.experience }}</span>
+                                                <span class="labels-tag">{{ job.educational }}</span>
+                                                <span class="labels-tag">{{ job.skills }}</span>
+                                            </div>
+                                        </a>
+                                        <br>
+                                        {% if job.company_url %}
+                                            <a href="{{ job.company_url }}" target="_blank">
+                                        {% else %}
+                                            <a href="{{ job.job_url }}" target="_blank">
+                                        {% endif %}
+                                        <div data-nick="job-detail-company-info" class="job-detail-company-box">
+                                            <div class="job-company-info-box">
+                                                <span class="company-name ellipsis-1">{{ job.company_name }}</span>
+                                                <div class="company-tags-box ellipsis-1">
+                                                    <span>{{ job.company_direction }}&nbsp&nbsp</span>
+                                                    <span>{{ job.company_size }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="paginator row">
+        <div class="m-auto">
+        <span class="step-links">
+            {% if jobs.has_previous %}
+                <a href="?page=1&order={{ order }}&search={{ search }}&city={{ city }}"
+                   class="btn btn-success">
+                    &laquo; 1
+                </a>
+                <span>...</span>
+                <a href="?page={{ jobs.previous_page_number }}&order={{ order }}&search={{ search }}&city={{ city }}"
+                   class="btn btn-secondary">
+                    {{ jobs.previous_page_number }}
+                </a>
+            {% endif %}
+            <span class="current btn btn-danger btn-lg">
+                {{ jobs.number }}
+            </span>
+
+            <!-- 如果不是最末页，则显示下翻按钮 -->
+            {% if jobs.has_next %}
+                <a href="?page={{ jobs.next_page_number }}&order={{ order }}&search={{ search }}&city={{ city }}"
+                   class="btn btn-secondary">
+                    {{ jobs.next_page_number }}
+                </a>
+                <span>...</span>
+                <a href="?page={{ jobs.paginator.num_pages }}&order={{ order }}&search={{ search }}&city={{ city }}"
+                   class="btn btn-success"
+                >
+                    {{ jobs.paginator.num_pages }} &raquo;
+                </a>
+            {% endif %}
+        </span>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,7 @@
+[client]
+DATABASE=GraduationProject
+USER=root
+PASSWORD=Llb011223
+HOST=localhost
+POST=3306
+default-character-set=utf8

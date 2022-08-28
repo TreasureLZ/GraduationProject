@@ -1,0 +1,9 @@
+asgiref @ file:///tmp/build/80754af9/asgiref_1625643473416/work
+certifi==2021.10.8
+Django @ file:///tmp/build/80754af9/django_1625585912945/work
+django-password-reset==2.0
+psycopg2 @ file:///opt/concourse/worker/volumes/live/d12e789f-5b6c-4947-7cc2-187f3a9c9696/volume/psycopg2_1612298599991/work
+PyMySQL==1.0.2
+pytz==2021.3
+sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1631814937681/work
